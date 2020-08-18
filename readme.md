@@ -13,7 +13,7 @@ The reviews of second version of algorithm are shown as follows:
 
 1. the keywords: "view planning", "coverage planning", "coverage path planning" for searching the code in github for camera veiwpoint planning problem, however no code related with octomap code has been found for this problem.
 
-2. point cloud based coverage viewpoint planning: https://github.com/search?p=1&q=next+best+view&type=Repositories, the reference paper is: 
+2. point cloud based coverage viewpoint planning: https://github.com/RMonica/basic_next_best_view/blob/master/CMakeLists.txt , the reference paper is: 
 Global Registration of Mid-Range 3D Observations and Short Range Next Best Views,
 
 3. octomap based coverage viewpoint planning: https://github.com/JoseJaramillo/NBV/blob/master/main.cpp, the reference paper is: 
