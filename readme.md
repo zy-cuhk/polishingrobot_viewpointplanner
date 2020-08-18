@@ -23,7 +23,7 @@ This algorithm reads a PLC file and prints the Next Best View (NBV) coordinates 
 4. point cloud based coverage viewpoint planning: https://github.com/RMonica/surfel_next_best_view/tree/master/surfel_next_best_view
 the reference paper is: R. Monica and J. Aleotti, "Surfel-Based Next Best View Planning", in IEEE Robotics and Automation Letters, vol. 3, no. 4, pp. 3324-3331, Oct. 2018
 
-5. octomap based coverage viewpoint planning: https://github.com/ethz-asl/nbvplanner
+5. octomap based coverage viewpoint planning: https://github.com/ethz-asl/nbvplanner,
 the refrence paper is: @inproceedings{bircher2016receding, title={Receding horizon "next-best-view" planner for 3D exploration}, author={Bircher, Andreas and Kamel, Mina and Alexis, Kostas and Oleynikova, Helen and Siegwart, Roland}, booktitle={2016 IEEE International Conference on Robotics and Automation (ICRA)}, pages={1462--1468}, year={2016}, organization={IEEE} }
 
 -----------------------------------------------------------------------------------------------
@@ -31,6 +31,8 @@ Generally the programming approaches can be divided into three types based on th
 1. cloud point based method 
 2. octomap based method
 3. mesh based method 
+
+
 
 
 
