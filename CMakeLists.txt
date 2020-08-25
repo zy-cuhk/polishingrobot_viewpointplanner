@@ -66,7 +66,7 @@ include_directories(
 )
 
 add_executable(polishingrobot_viewpointplanner
-  src/planning_scene1.cpp
+  src/moveit_collision_check_v2.cpp
 )
 target_link_libraries(polishingrobot_viewpointplanner ${catkin_LIBRARIES})
 
