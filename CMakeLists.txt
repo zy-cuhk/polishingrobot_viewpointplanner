@@ -1,12 +1,8 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(polishingrobot_viewpointplanner)
 
-## Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++11)
 
-## Find catkin macros and libraries
-## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
-## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   interactive_markers
@@ -23,22 +19,13 @@ find_package(catkin REQUIRED COMPONENTS
   tf2_ros
   tf2_eigen
   tf2_geometry_msgs
+  octomap_msgs
 )
-
 find_package(Eigen3 REQUIRED)
 find_package(Boost REQUIRED system filesystem date_time thread)
+find_package(OCTOMAP REQUIRED)
 
 
-
-###################################
-## catkin specific configuration ##
-###################################
-## The catkin_package macro generates cmake config files for your package
-## Declare things to be passed to dependent projects
-## INCLUDE_DIRS: uncomment this if your package contains header files
-## LIBRARIES: libraries you create in this project that dependent projects also need
-## CATKIN_DEPENDS: catkin_packages dependent projects also need
-## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   LIBRARIES
   INCLUDE_DIRS
@@ -50,37 +37,24 @@ catkin_package(
     tf2_geometry_msgs
   DEPENDS
     EIGEN3
+    octomap_msgs
 )
 
-###########
-## Build ##
-###########
-
-## Specify additional locations of header files
-## Your package locations should be listed before other locations
 include_directories(
-# include
   ${catkin_INCLUDE_DIRS}
   ${Boost_INCLUDE_DIR} 
   ${EIGEN3_INCLUDE_DIRS}
+  ${OCTOMAP_INCLUDE_DIRS}
 )
 
-add_executable(polishingrobot_viewpointplanner
-  src/moveit_collision_check_v2.cpp
-)
-target_link_libraries(polishingrobot_viewpointplanner ${catkin_LIBRARIES})
+add_executable(collision_check src/moveit_collision_check_v2.cpp)
+target_link_libraries(collision_check ${catkin_LIBRARIES})
 
-
-
-#############
-## Install ##
-#############
+# add_executable(map_server ${SOURCE_FILES})
+# add_dependencies(map_server ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# target_link_libraries(map_server ${OCTOMAP_LIBRARIES} ${catkin_LIBRARIES})
 
 install(DIRECTORY launch DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
-
-#############
-## Testing ##
-#############
 
 
 

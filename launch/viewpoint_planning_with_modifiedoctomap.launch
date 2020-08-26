@@ -1,0 +1,17 @@
+<launch>
+
+
+  <!-- Load robot model modular-->
+  <include file="$(find polishingrobot_moveit_config)/launch/demo.launch">
+  </include>
+
+  <!-- load collision check modular-->
+  <param name="judge_self_collision_flag" type="int" value="0"/>
+  <node name="collision_check" pkg="polishingrobot_viewpointplanner" type="polishingrobot_viewpointplanner" respawn="false" output="screen">
+  </node>
+
+  <!-- Load viewpoint planning with octomap-->
+  <!-- <node name="publish_pointcloud" pkg="publish_pointcloud" type="publish_pointcloud">
+  </node> -->
+
+</launch>
