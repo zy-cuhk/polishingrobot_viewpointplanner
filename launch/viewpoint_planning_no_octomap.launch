@@ -1,6 +1,6 @@
 <launch>
   <param name="judge_self_collision_flag" type="int" value="0"/>
-  <node name="planning_scene" pkg="polishingrobot_viewpointplanner" type="polishingrobot_viewpointplanner" respawn="false" output="screen">
+  <node name="collision_check" pkg="polishingrobot_viewpointplanner" type="polishingrobot_viewpointplanner" respawn="false" output="screen">
   </node>
   <include file="$(find polishingrobot_moveit_config)/launch/demo.launch">
   </include>

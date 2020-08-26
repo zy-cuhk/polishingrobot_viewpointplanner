@@ -20,11 +20,18 @@ find_package(catkin REQUIRED COMPONENTS
   tf2_eigen
   tf2_geometry_msgs
   octomap_msgs
+	rospy
+	std_msgs
+	rostime 
+	sensor_msgs 
+	message_filters 
 )
 find_package(Eigen3 REQUIRED)
 find_package(Boost REQUIRED system filesystem date_time thread)
 find_package(OCTOMAP REQUIRED)
-
+find_package(OpenCV REQUIRED)
+find_package(OpenMP)
+find_package(PCL REQUIRED)
 
 catkin_package(
   LIBRARIES
@@ -45,17 +52,26 @@ include_directories(
   ${Boost_INCLUDE_DIR} 
   ${EIGEN3_INCLUDE_DIRS}
   ${OCTOMAP_INCLUDE_DIRS}
+  ${catkin_INCLUDE_DIRS}
+	${OpenCV_INCLUDE_DIRS}
+	${PCL_INCLUDE_DIRS}
 )
 
 add_executable(collision_check src/moveit_collision_check_v2.cpp)
 target_link_libraries(collision_check ${catkin_LIBRARIES})
-
-# add_executable(map_server ${SOURCE_FILES})
-# add_dependencies(map_server ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-# target_link_libraries(map_server ${OCTOMAP_LIBRARIES} ${catkin_LIBRARIES})
-
 install(DIRECTORY launch DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 
+add_executable(publish_pointcloud src/publish_pointcloud.cpp)
+target_link_libraries(publish_pointcloud ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+install(TARGETS publish_pointcloud RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+
+add_executable(viewpoint_planning_using_octomap src/viewpoint_planning_using_octomap.cpp)
+target_link_libraries(viewpoint_planning_using_octomap ${catkin_LIBRARIES} ${OCTOMAP_LIBRARIES} ${PCL_LIBRARIES})
+
+add_executable(publish_octomap src/publish_octomap.cpp)
+add_dependencies(publish_octomap ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(publish_octomap ${OCTOMAP_LIBRARIES} ${catkin_LIBRARIES})
+install(TARGETS publish_octomap DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 
 
