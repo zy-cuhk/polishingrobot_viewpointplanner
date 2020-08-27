@@ -40,7 +40,7 @@ int main(int argc, char** argv)
     // set up pcl rostopic and transform pcd to point cloud 
 	std::string topic,path,frame_id;
     int hz=5;
-    nh.param<std::string>("path", path, "/home/zy/catkin_ws/src/polishingrobot_ylz/publish_pointcloud/data/test_pcd.pcd");
+    nh.param<std::string>("path", path, "/home/zy/catkin_ws/src/polishingrobot_ylz/polishingrobot_viewpointplanner/src/test_pcd.pcd");
 	nh.param<std::string>("frame_id", frame_id, "map");
 	nh.param<std::string>("topic", topic, "/pointcloud/output");
     nh.param<int>("hz", hz, 5);
@@ -82,11 +82,13 @@ int main(int argc, char** argv)
 
 
     // create FOV Of camera
-    octomap::point3d Point3dwall(2,0,0);    
+    octomap::point3d Point3dwall(1.05,0.0,0.0);    
     octomap::Pointcloud pointwall;     
-    for(int ii=1;ii<321;ii++){
+    // for(int ii=1;ii<321;ii++){
+    for(int ii=1;ii<401;ii++){
         for(int iii=1;iii<241;iii++){
-            Point3dwall.y()= (-0.560027)+(ii*0.003489);
+            Point3dwall.y()= (-0.690027)+(ii*0.003489);
+            // Point3dwall.y()= (-0.560027)+(ii*0.003489);
             Point3dwall.z()= (-0.430668)+(iii*0.003574);
             pointwall.push_back(Point3dwall);
         }
@@ -102,7 +104,7 @@ int main(int argc, char** argv)
         iterator.z()=0.430668+time*0.85776;
         
         octomath::Vector3 Translation2(iterator.x(),iterator.y(),iterator.z());		
-        octomath::Quaternion Rotation2(0,0.4,0.0);	
+        octomath::Quaternion Rotation2(0,0.0,0.0);	
         octomath::Pose6D RotandTrans2(Translation2,Rotation2);	
         variablePointwall=pointwall;		
         variablePointwall.transform(RotandTrans2);

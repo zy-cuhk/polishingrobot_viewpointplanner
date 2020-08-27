@@ -16,7 +16,7 @@ For the package of polishingrobot_viewpointplanner
 
 ## the third verision of algorithm, the actions to be taken include:
 1. rosrun polishingrobot_viewpointplanner pubilish_pointcloud
-2. rosurn polishingrobot_viewpointplanner collision_check
+2. rosrun polishingrobot_viewpointplanner collision_check
 
 # the function is to obtain collision check of moveit and modified octomap 
 

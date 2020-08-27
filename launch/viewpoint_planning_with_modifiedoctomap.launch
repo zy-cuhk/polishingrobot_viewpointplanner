@@ -1,6 +1,5 @@
 <launch>
 
-
   <!-- Load robot model modular-->
   <include file="$(find polishingrobot_moveit_config)/launch/demo.launch">
   </include>
