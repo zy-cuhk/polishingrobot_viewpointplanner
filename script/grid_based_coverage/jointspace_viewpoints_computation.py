@@ -8,7 +8,8 @@ import numpy
 import os,sys
 import socket
 
-from aubo_kienamatics import *
+from robotic_functions.aubo_kinematics import *
+# from aubo_kienamatics import *
 from sensor_msgs.msg import JointState
 import yaml
 import numpy as np

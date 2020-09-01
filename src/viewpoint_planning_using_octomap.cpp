@@ -94,6 +94,7 @@ int main(int argc, char** argv)
         }
     }
 
+
     bool flag1;
     for (int time=0;time<3;time++){
         // change camera pose
