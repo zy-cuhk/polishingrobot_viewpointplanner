@@ -42,13 +42,11 @@ void add_objects( moveit::planning_interface::PlanningSceneInterface& planning_s
       return;
   } 
   
-  //
   shapes::ShapeMsg mesh_msg;
   shapes::constructMsgFromShape(load_mesh, mesh_msg);
   shape_msgs::Mesh mesh;
   mesh = boost::get<shape_msgs::Mesh>(mesh_msg);
 
-  //定义物体方位
   geometry_msgs::Pose pose;
   pose.orientation.w =1.0;
   pose.position.x = 0;
@@ -60,15 +58,11 @@ void add_objects( moveit::planning_interface::PlanningSceneInterface& planning_s
   obj.id="dae_mesh";
   obj.mesh_poses.push_back(pose);
   obj.meshes.push_back(mesh);
-  //定义操作为添加
   obj.operation = obj.ADD;
 
   std::vector<moveit_msgs::CollisionObject> collision_objects;
   collision_objects.push_back(obj);
   planning_scene_interface.addCollisionObjects(collision_objects);
-
-
-
 }
 
 int main(int argc, char** argv)
@@ -79,22 +73,14 @@ int main(int argc, char** argv)
   spinner.start();
 
   ros::NodeHandle node_handle;
-
   robot_model_loader::RobotModelLoaderPtr robot_model_loader(
   new robot_model_loader::RobotModelLoader("robot_description"));
 
-  // const robot_model::RobotModelPtr& kinematic_model = robot_model_loader->getModel();
-
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
-
-
   collision_detection::CollisionRequest collision_request;
   collision_detection::CollisionResult collision_result;
-
-
   planning_scene_monitor::PlanningSceneMonitorPtr planning_scene_monitor;
   planning_scene_monitor.reset(new planning_scene_monitor::PlanningSceneMonitor(robot_model_loader));
-
   planning_scene_monitor->startSceneMonitor();
   planning_scene_monitor->startStateMonitor();
 
@@ -113,39 +99,55 @@ int main(int argc, char** argv)
   planning_scene::PlanningScenePtr planning_scene = planning_scene_monitor->getPlanningScene();
   robot_state::RobotState& 
   current_state = planning_scene->getCurrentStateNonConst();
-
-  /* add a single object to ps's world */
-  // add_objects(planning_scene_interface);
-  // sleep(2);
+  add_objects(planning_scene_interface);
+  sleep(2);
 
   ros::Rate loop_rate(10.0);
+  bool self_collision_state, environment_collision_state
+
   while (ros::ok())
   {
 
-      // bool exist_dae_mesh = planning_scene->getWorld()->hasObject("dae_mesh");
-      // ROS_WARN("exist_dae_mesh: %d", exist_dae_mesh);
+      bool exist_dae_mesh = planning_scene->getWorld()->hasObject("dae_mesh");
+      ROS_WARN("exist_dae_mesh: %d", exist_dae_mesh);
+      current_state.update();
 
-      // current_state.update();
       ROS_WARN("printStatePositions:");
       current_state.printStatePositions();
+
+      // self collision check 
       collision_result.clear();
       planning_scene->checkSelfCollision(collision_request, collision_result, current_state);
       ROS_INFO_STREAM("Test SelfCollision Check  : Current state is " << (collision_result.collision ? "in" : "not in") << " self collision");
-      std::cout<<"collision_result.collision "<< collision_result.collision<<std::endl;
+      //std::cout<<"collision_result.collision "<< collision_result.collision<<std::endl;
+      if (collision_result.collision==1){
+          self_collision_state=1;
+      }
+      else{
+          self_collision_state=0;
+      }
+
+      // environment collision check  
+      collision_result.clear();
+      collision_detection::AllowedCollisionMatrix acm = planning_scene->getAllowedCollisionMatrix();
+      planning_scene->checkCollision(collision_request, collision_result, current_state, acm);
+      ROS_INFO_STREAM("Test Collision With Environment Check  : Current state is " << (collision_result.collision ? "in" : "not in") << " collision with environment");
+      if (collision_result.collision==1){
+          environment_collision_state=1;
+      }
+      else{
+          environment_collision_state=0;
+      }
+      
+      // collisiion state publish
       if(ros::param::has("/judge_self_collision_flag"))
       {
-        ros::param::set("/judge_self_collision_flag",collision_result.collision);
+          collision_result.collision = self_collision_state|environment_collision_state
+          ros::param::set("/judge_self_collision_flag",collision_result.collision);
       }
-      // collision_result.clear();
-      // collision_detection::AllowedCollisionMatrix acm = planning_scene->getAllowedCollisionMatrix();
-      // planning_scene->checkCollision(collision_request, collision_result, current_state, acm);
-      // ROS_INFO_STREAM("Test Collision With Environment Check  : Current state is " << (collision_result.collision ? "in" : "not in") << " collision with environment");
-      // ros::param::set("/judge_self_collision_flag",0);
       loop_rate.sleep();
   }
 
-
-  // END_TUTORIAL
 
   ros::shutdown();
   return 0;
